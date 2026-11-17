@@ -1,0 +1,22 @@
+{
+  "created_at_utc": "2026-11-17T00:37:55.901267+00:00",
+  "input_dir": "/mnt/data/rag_tmu_ingestion_project/data/raw",
+  "files_discovered": 4,
+  "documents_ok": 4,
+  "documents_failed": 0,
+  "passages": 28,
+  "pages_ocr": 1,
+  "by_extension": {
+    ".docx": 1,
+    ".xlsx": 1,
+    ".pdf": 2
+  },
+  "verified_metadata_docs": 1,
+  "documents_without_text": [],
+  "error_files": [],
+  "notes": [
+    "Metadata auto-extracted must be manually verified before validity-sensitive retrieval.",
+    "No gold answer/gold evidence is included in the online corpus.",
+    "BM25/vector indexing is downstream: this pipeline only creates JSONL."
+  ]
+}

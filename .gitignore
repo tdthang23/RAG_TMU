@@ -1,0 +1,17 @@
+﻿.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.idea/
+.vscode/
+.env
+.env.*
+!.env.example
+
+data/raw/*
+data/processed/*
+data/metadata/registry.csv  
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+

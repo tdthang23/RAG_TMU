@@ -1,0 +1,22 @@
+input_dir: data/raw
+metadata_registry: data/metadata/registry.csv
+output_dir: data/processed
+
+pdf:
+  ocr_mode: auto
+  ocr_language: vie+eng
+  ocr_dpi: 220
+  min_native_chars: 35
+  tesseract_cmd: 'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+chunking:
+  max_chars: 950
+  overlap_chars: 120
+
+excel:
+  header_row: 1
+  include_empty_rows: false
+  # Ví dụ: có thể thêm metadata registry để ghi chú thông tin theo file.
+
+quality:
+  min_passage_chars: 12
