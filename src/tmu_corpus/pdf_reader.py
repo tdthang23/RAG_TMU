@@ -30,7 +30,7 @@ def read_pdf(path: Path, cfg: dict) -> ExtractedDocument:
                         pytesseract.pytesseract.tesseract_cmd = tess_path
                     pix = page.get_pixmap(dpi=ocr_dpi, alpha=False)
                     image = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
-                    ocr_text = pytesseract.image_to_string(image, lang=ocr_language, config="--psm 3")
+                    ocr_text = pytesseract.image_to_string(image, lang=ocr_language, config="--psm 1")
                     if ocr_text.strip():
                         text = ocr_text
                         method = "ocr"
