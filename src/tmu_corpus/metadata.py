@@ -50,6 +50,13 @@ def _extract_issuer(text: str, header_lines: list[str]) -> str | None:
     return None
 
 
+
+# Recognize school years with or without spaces around the dash.
+# Handles ordinary hyphen, Unicode hyphens, en/em dash, and minus sign.
+ACADEMIC_YEAR_RE = re.compile(
+    r"\bnăm\s*học\s*(\d{4})\s*[-\u2010-\u2015\u2212]\s*(\d{4})(?!\d)", re.I
+)
+
 def _iso(y: str, m: str, d: str) -> str | None:
     try:
         return datetime(int(y), int(m), int(d)).date().isoformat()
@@ -83,15 +90,18 @@ def extract_metadata(text: str) -> dict:
                 break
     effective_date = None
     effective_academic_year = None
-    for line in lines:
+    for i, line in enumerate(lines):
         if re.search(r"(?:có hiệu lực|hiệu lực thi hành|áp dụng từ)", line, re.I):
-            academic = re.search(r"năm học\s*(\d{4})\s*[–—-]\s*(\d{4})", line, re.I)
+            # Also tolerate an OCR/text-layout line break between the trigger
+            # (e.g. "áp dụng từ") and "năm học 2026 - 2027".
+            context = " ".join(lines[i:i + 2])
+            academic = ACADEMIC_YEAR_RE.search(context)
             if academic:
                 effective_academic_year = f"{academic.group(1)}-{academic.group(2)}"
             effective_match = re.search(r"(?:từ|kể từ)\s+(ngày\s+\d{1,2}\s+tháng\s+\d{1,2}\s+năm\s+\d{4}|ngày\s+\d{1,2}[./-]\d{1,2}[./-]\d{4})", line, re.I)
             if effective_match:
                 effective_date = _find_date(effective_match.group(1))
-            elif re.search(r"kể từ ngày ký", line, re.I) and issued_date:
+            elif (re.search(r"(?:kể\s+)?từ\s+ngày\s+ký\b", line, re.I) and issued_date):
                 effective_date = issued_date
     cohorts = sorted({f"K{n}" for n in re.findall(r"\b(?:khóa|khoá)\s+(\d{1,3})\b", text, re.I)})
     # Cohorts mentioned anywhere are CANDIDATES, not proof of applicability.
